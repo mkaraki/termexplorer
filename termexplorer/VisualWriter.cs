@@ -11,7 +11,7 @@ namespace termexplorer
         public static void SWrite()
         {
             Clear();
-            int WritedLine = 1;
+            int WritedLine = 0;
 
             string ContentSplit = new string('-', WritableWidth) + Environment.NewLine;
 
@@ -33,8 +33,8 @@ namespace termexplorer
             WritedLine += 2;
             Write(ContentSplit);
 
-            int WritableFname = WritableWidth / 2 - 1 - 2;
-            int FnameHeight = WritableHeight - WritedLine;
+            int WritableFname = WritableWidth / 2 -1 - 2;
+            int FnameHeight = WritableHeight - 1 - WritedLine;
             string brankfn = new string(' ', WritableFname + 2);
             for (int i = 0; i < FnameHeight; i++)
             {
