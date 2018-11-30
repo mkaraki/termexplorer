@@ -44,17 +44,29 @@ namespace termexplorer
             }
             // Change Window
             #region
-            else if (cki.Key == ConsoleKey.RightArrow)
+            else if (cki.Key == ConsoleKey.RightArrow || cki.Key == ConsoleKey.LeftArrow)
             {
-                if (ToWrite.CurrentWindow == 1)
-                    ToWrite.CurrentWindow = 2;
-            }
-            else if (cki.Key == ConsoleKey.LeftArrow)
-            {
-                if (ToWrite.CurrentWindow == 2)
-                    ToWrite.CurrentWindow = 1;
+                ChangeWindow(false);
             }
             #endregion
+            // Change Address
+            else if (cki.Modifiers == ConsoleModifiers.Alt && cki.Key == ConsoleKey.D)
+            {
+                AddressSelectWindow();
+            }
+        }
+
+        public static void AddressSelectWindow()
+        {
+            ChangeAddressWindow();
+        }
+
+        public static void ChangeWindow(bool Direction)
+        {
+            if (ToWrite.CurrentWindow == 1)
+                ToWrite.CurrentWindow = 2;
+            else if (ToWrite.CurrentWindow == 2)
+                ToWrite.CurrentWindow = 1;
         }
 
         public static void OpenFile(string FilePath)

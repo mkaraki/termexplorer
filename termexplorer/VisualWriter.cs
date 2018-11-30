@@ -154,5 +154,44 @@ namespace termexplorer
                 public int CurrentPointer = 0;
             }
         }
+
+        public static void ChangeAddressWindow()
+        {
+            if (ToWrite.CurrentWindow == 1)
+            {
+                ChangeAddressWindowWriter("Window1",ToWrite.Window1.Files[0].FullPath);
+                string UCPath = ReadLine();
+                ToWrite.Window1 = new WriteInfo.Window(UCPath);
+            }
+            else if (ToWrite.CurrentWindow == 2)
+            {
+                ChangeAddressWindowWriter("Window1",ToWrite.Window1.Files[0].FullPath);
+                string UCPath = ReadLine();
+                ToWrite.Window2 = new WriteInfo.Window(UCPath);
+            }
+
+            ForegroundColor = ConsoleColor.White;
+            BackgroundColor = ConsoleColor.Blue;
+        }
+        private static void ChangeAddressWindowWriter(string TargetName,string DefaultLocation)
+        {
+            Clear();
+            int This_top = (WritableHeight / 2) - 2;
+
+            if (Config.WriteProductName)
+            {
+                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
+                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+            }
+
+            SetCursorPosition(0,This_top);
+            string TargNamepad = new string(' ', (WritableWidth - TargetName.Length) / 2);
+            Write(TargNamepad + TargetName + TargNamepad + Environment.NewLine);
+            BackgroundColor = ConsoleColor.White;
+            ForegroundColor = ConsoleColor.Black;
+            Write(new string(' ', WritableWidth));
+            SetCursorPosition(0,This_top+1);
+        }
+
     }
 }
