@@ -6,7 +6,15 @@ namespace termexplorer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            while (true)
+            {
+                ConsoleInfo.UpdateConsoleInfo();
+                VisualWriter.SWrite();
+                ConsoleKeyInfo cki = Console.ReadKey(false);
+                if (cki.KeyChar == 'q')
+                    break;
+                UserControl.Handle(cki);
+            }
         }
     }
 }
