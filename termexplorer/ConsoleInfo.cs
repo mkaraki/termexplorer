@@ -8,7 +8,7 @@ namespace termexplorer
     {
         public static void UpdateConsoleInfo()
         {
-            WritableWidth = Console.WindowWidth - 1;
+            WritableWidth = Console.WindowWidth - 2;
             WritableHeight = Console.WindowHeight;
         }
 

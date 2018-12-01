@@ -157,17 +157,24 @@ namespace termexplorer
 
         public static void ChangeAddressWindow()
         {
-            if (ToWrite.CurrentWindow == 1)
+            try
             {
-                ChangeAddressWindowWriter("Window1",ToWrite.Window1.Files[0].FullPath);
-                string UCPath = ReadLine();
-                ToWrite.Window1 = new WriteInfo.Window(UCPath);
+                if (ToWrite.CurrentWindow == 1)
+                {
+                    ChangeAddressWindowWriter("Window1", ToWrite.Window1.Files[0].FullPath);
+                    string UCPath = ReadLine();
+                    ToWrite.Window1 = new WriteInfo.Window(UCPath);
+                }
+                else if (ToWrite.CurrentWindow == 2)
+                {
+                    ChangeAddressWindowWriter("Window1", ToWrite.Window1.Files[0].FullPath);
+                    string UCPath = ReadLine();
+                    ToWrite.Window2 = new WriteInfo.Window(UCPath);
+                }
             }
-            else if (ToWrite.CurrentWindow == 2)
+            catch (System.IO.DirectoryNotFoundException)
             {
-                ChangeAddressWindowWriter("Window1",ToWrite.Window1.Files[0].FullPath);
-                string UCPath = ReadLine();
-                ToWrite.Window2 = new WriteInfo.Window(UCPath);
+                ErrorScreen("No Directory",$"We cant find selected directory.");
             }
 
             ForegroundColor = ConsoleColor.White;
@@ -187,11 +194,45 @@ namespace termexplorer
             SetCursorPosition(0,This_top);
             string TargNamepad = new string(' ', (WritableWidth - TargetName.Length) / 2);
             Write(TargNamepad + TargetName + TargNamepad + Environment.NewLine);
+
+            // Aveable Drive Show
+            Write("Aveable Drives:");
+            string[] drives = System.IO.Directory.GetLogicalDrives();
+            foreach (string drv in drives)
+                Write($" [{drv}]");
+            Write(Environment.NewLine);
+
             BackgroundColor = ConsoleColor.White;
             ForegroundColor = ConsoleColor.Black;
+
             Write(new string(' ', WritableWidth));
-            SetCursorPosition(0,This_top+1);
+            SetCursorPosition(0,This_top+2);
         }
 
+        public static void ErrorScreen(string ErrorTitle,string ErrorDetails)
+        {
+            BackgroundColor = ConsoleColor.DarkRed;
+            ForegroundColor = ConsoleColor.White;
+
+            Clear();
+            int This_top = (WritableHeight / 2) - 4;
+
+            if (Config.WriteProductName)
+            {
+                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
+                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+            }
+
+            SetCursorPosition(0, This_top);
+            string ErrTitlepad = new string(' ', (WritableWidth - ErrorTitle.Length) / 2);
+            Write(ErrTitlepad + ErrorTitle + ErrTitlepad + Environment.NewLine);
+
+            SetCursorPosition(0,This_top + 2);
+            WriteLine(ErrorDetails);
+
+            WriteLine(Environment.NewLine);
+            WriteLine("Press Enter to continue.");
+            ReadLine();
+        }
     }
 }
