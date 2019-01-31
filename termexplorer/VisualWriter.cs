@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Get_Unicode_EastAsianWidth;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using static termexplorer.Config.ColorMap;
 using static System.Console;
 using static termexplorer.ConsoleInfo;
 
@@ -15,8 +17,8 @@ namespace termexplorer
 
             string ContentSplit = new string('-', WritableWidth) + Environment.NewLine;
 
-            ForegroundColor = ConsoleColor.White;
-            BackgroundColor = ConsoleColor.Blue;
+            ForegroundColor = DefaultTextColor;
+            Console.BackgroundColor = Config.ColorMap.BackgroundColor;
 
             if (Config.WriteProductName)
             {
@@ -27,13 +29,13 @@ namespace termexplorer
 
             //TODO: Write Options
             WritedLine++;
-            Write(Environment.NewLine);
+            WriteLine("Alt+D: Change Dir");
 
             // Write Files
             WritedLine += 2;
             Write(ContentSplit);
 
-            int WritableFname = WritableWidth / 2 -1 - 2;
+            int WritableFname = WritableWidth / 2 - 1 - 2;
             int FnameHeight = WritableHeight - 1 - WritedLine;
             string brankfn = new string(' ', WritableFname + 2);
             for (int i = 0; i < FnameHeight; i++)
@@ -42,72 +44,19 @@ namespace termexplorer
                 Write('|');
 
                 //Window1
-                #region
-                if (ToWrite.CurrentWindow == 1)
-                {
-                    if (ToWrite.Window1.CantAccess)
-                        BackgroundColor = ConsoleColor.DarkGray;
-                    else
-                        BackgroundColor = ConsoleColor.White;
-                    ForegroundColor = ConsoleColor.Black;
-                }
-
-                int w1point = i;
-                if (ToWrite.Window1.Files.Count > FnameHeight)
-                    w1point += ToWrite.Window1.CurrentPointer;
-
-                if (w1point < ToWrite.Window1.Files.Count)
-                {
-                    if (w1point == ToWrite.Window1.CurrentPointer)
-                        Write("> ");
-                    else
-                        Write("  ");
-                    if (ToWrite.Window1.Files[w1point].FileName != ".." && ToWrite.Window1.Files[w1point].IsDirectory)
-                        ForegroundColor = ConsoleColor.Green;
-                    Write(ToWrite.Window1.Files[w1point].FileName.PadRight(WritableFname));
-                }
-                else
-                    Write(brankfn);
-                #endregion
+                WriteDirEntryWithLine(1, i, FnameHeight, WritableFname + 2);
 
                 //Split
-                ForegroundColor = ConsoleColor.White;
-                BackgroundColor = ConsoleColor.Blue;
+                ForegroundColor = DefaultTextColor;
+                Console.BackgroundColor = Config.ColorMap.BackgroundColor;
                 Write('|');
 
                 //Window2
-                #region
-                if (ToWrite.CurrentWindow == 2)
-                {
-                    if (ToWrite.Window2.CantAccess)
-                        BackgroundColor = ConsoleColor.DarkGray;
-                    else
-                        BackgroundColor = ConsoleColor.White;
-                    ForegroundColor = ConsoleColor.Black;
-                }
-
-                int w2point = i;
-                if (ToWrite.Window2.Files.Count > FnameHeight)
-                    w2point += ToWrite.Window2.CurrentPointer;
-
-                if (w2point < ToWrite.Window2.Files.Count)
-                {
-                    if (w2point == ToWrite.Window2.CurrentPointer)
-                        Write("> ");
-                    else
-                        Write("  ");
-
-                    if (ToWrite.Window2.Files[w2point].FileName != ".." && ToWrite.Window2.Files[w2point].IsDirectory)
-                        ForegroundColor = ConsoleColor.Green;
-                    Write(ToWrite.Window2.Files[w2point].FileName.PadRight(WritableFname));
-                }
-                else
-                    Write(brankfn);
-                #endregion
+                WriteDirEntryWithLine(2, i, FnameHeight, WritableFname + 2);
 
                 // End
-                ForegroundColor = ConsoleColor.White;
-                BackgroundColor = ConsoleColor.Blue;
+                ForegroundColor = DefaultTextColor;
+                Console.BackgroundColor = Config.ColorMap.BackgroundColor;
                 Write('|');
 
                 Write(Environment.NewLine);
@@ -116,39 +65,91 @@ namespace termexplorer
             Write(ContentSplit);
         }
 
+        public static void WriteDirEntryWithLine(int WindowId,int CurrentLine,int WritableHeight,int WritableWidth)
+        {
+            int id = WindowId;
+
+            if (ToWrite.CurrentWindow == id)
+            {
+                Console.BackgroundColor = ContentBackgroundColor;
+                ForegroundColor = EntryTextColor;
+            }
+
+            int w2point = CurrentLine;
+            if (ToWrite.Windows[id].Files.Count > WritableHeight)
+                w2point += ToWrite.Windows[id].CurrentPointer;
+
+            if (w2point < ToWrite.Windows[id].Files.Count)
+            {
+                if (w2point == ToWrite.Windows[id].CurrentPointer)
+                    Write("> ");
+                else
+                    Write("  ");
+
+                if (ToWrite.Windows[id].Files[w2point].FileName != ".." && ToWrite.Windows[id].Files[w2point].IsDirectory)
+                    ForegroundColor = DirectoryTextColor;
+                Write(WriteEntryName(ToWrite.Windows[id].Files[w2point].FileName, WritableWidth - 2));
+            }
+            else
+                Write(new string(' ',WritableWidth));
+        }
+
+        public static string WriteEntryName(string Original, int Writable)
+        {
+            int OriginalLength = EAWCheck.GetStrLenWithEAW(Original, true);
+            int Pad = Writable - OriginalLength;
+            if (Pad > 0)
+                return Original + new string(' ', Pad);
+            else
+            {
+                string toret = "";
+                int ToWrite = Writable - 5;
+                int CurrentLen = 0;
+                foreach (char f_char in Original)
+                {
+                    toret += f_char;
+                    bool ctype = EAWCheck.IsFullWidth(f_char, true);
+                    if (ctype) CurrentLen += 2;
+                    else CurrentLen += 1;
+                    if (CurrentLen >= 5) break;
+                }
+                return toret;
+            }
+        }
+
         public static WriteInfo ToWrite = new WriteInfo();
 
         public class WriteInfo
         {
-            public Window Window1 = new Window(Environment.CurrentDirectory);
-            public Window Window2 = new Window(@"C:\");
+            public List<Window> Windows = new List<Window>()
+            {
+                null,
+                new Window(Environment.CurrentDirectory),
+                new Window(Environment.CurrentDirectory)
+            };
 
             public int CurrentWindow = 1;
 
             public class Window
             {
-                public Window(string dirPath)
+                public Window(string dirPath, bool CantAccessError = false)
                 {
                     Files = new List<FileInfo>();
                     try { Files.Add(new FileInfo(dirPath, true)); }
                     catch { }
 
                     List<string> files = new List<string>();
-                    try
-                    {
-                        files.AddRange(System.IO.Directory.GetDirectories(dirPath, "*", System.IO.SearchOption.TopDirectoryOnly).ToList());
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        CantAccess = true;
-                        return;
-                    }
+
+                    files.AddRange(System.IO.Directory.GetDirectories(dirPath, "*", System.IO.SearchOption.TopDirectoryOnly).ToList());
                     files.AddRange(System.IO.Directory.GetFiles(dirPath, "*", System.IO.SearchOption.TopDirectoryOnly).ToList());
+
+                    Current = new FileInfo(dirPath);
 
                     foreach (string fname in files)
                         Files.Add(new FileInfo(fname));
                 }
 
+                public FileInfo Current;
                 public bool CantAccess = false;
                 public List<FileInfo> Files;
                 public int CurrentPointer = 0;
@@ -157,62 +158,89 @@ namespace termexplorer
 
         public static void ChangeAddressWindow()
         {
-            try
-            {
-                if (ToWrite.CurrentWindow == 1)
-                {
-                    ChangeAddressWindowWriter("Window1", ToWrite.Window1.Files[0].FullPath);
-                    string UCPath = ReadLine();
-                    ToWrite.Window1 = new WriteInfo.Window(UCPath);
-                }
-                else if (ToWrite.CurrentWindow == 2)
-                {
-                    ChangeAddressWindowWriter("Window1", ToWrite.Window1.Files[0].FullPath);
-                    string UCPath = ReadLine();
-                    ToWrite.Window2 = new WriteInfo.Window(UCPath);
-                }
-            }
-            catch (System.IO.DirectoryNotFoundException)
-            {
-                ErrorScreen("No Directory",$"We cant find selected directory.");
-            }
+            string OldPath;
+            if (ToWrite.Windows[ToWrite.CurrentWindow].Files.Count < 1)
+                OldPath = null;
+            else
+                OldPath = ToWrite.Windows[ToWrite.CurrentWindow].Current.FullPath;
 
-            ForegroundColor = ConsoleColor.White;
-            BackgroundColor = ConsoleColor.Blue;
-        }
-        private static void ChangeAddressWindowWriter(string TargetName,string DefaultLocation)
-        {
+            #region Writer
+            string WindowName = $"Window {ToWrite.CurrentWindow}";
+
             Clear();
-            int This_top = (WritableHeight / 2) - 2;
+            int This_top = (WritableHeight / 2) - 3;
 
             if (Config.WriteProductName)
             {
                 string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
-                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+                WriteLine(titlepad + ProductInfo.Name + titlepad);
             }
 
-            SetCursorPosition(0,This_top);
-            string TargNamepad = new string(' ', (WritableWidth - TargetName.Length) / 2);
-            Write(TargNamepad + TargetName + TargNamepad + Environment.NewLine);
+            SetCursorPosition(0, This_top);
+            string TargNamepad = new string(' ', (WritableWidth - WindowName.Length) / 2);
+            WriteLine(TargNamepad + WindowName + TargNamepad);
+
+            WriteLine();
 
             // Aveable Drive Show
             Write("Aveable Drives:");
             string[] drives = System.IO.Directory.GetLogicalDrives();
             foreach (string drv in drives)
                 Write($" [{drv}]");
-            Write(Environment.NewLine);
+            WriteLine();
+            WriteLine();
 
-            BackgroundColor = ConsoleColor.White;
+            WriteLine($"Current: {OldPath}");
+
+            Console.BackgroundColor = ConsoleColor.White;
             ForegroundColor = ConsoleColor.Black;
 
             Write(new string(' ', WritableWidth));
-            SetCursorPosition(0,This_top+2);
+            SetCursorPosition(0, CursorTop);
+
+            #endregion
+
+            string UCPath = ReadLine().Replace("\"", "");
+
+            ChangeDir(UCPath, OldPath ?? Environment.CurrentDirectory);
+
+            ForegroundColor = DefaultTextColor;
+            Console.BackgroundColor = Config.ColorMap.BackgroundColor;
         }
 
-        public static void ErrorScreen(string ErrorTitle,string ErrorDetails)
+        public static void ChangeDir(string Path, string OldPath)
         {
-            BackgroundColor = ConsoleColor.DarkRed;
-            ForegroundColor = ConsoleColor.White;
+            try
+            {
+                System.IO.Directory.GetDirectories(Path);
+            }
+            catch (System.IO.DirectoryNotFoundException)
+            {
+                ErrorScreen("No Directory", $"Selected path is not found");
+                Path = OldPath;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                ErrorScreen("Access Denied", $"You don't have permission to access selected directory");
+                Path = OldPath;
+            }
+            catch (System.IO.IOException)
+            {
+                ErrorScreen("Not Directory", $"Selected path is not directory");
+                Path = OldPath;
+            }
+            catch (ArgumentException)
+            {
+                Path = OldPath;
+            }
+
+            ToWrite.Windows[ToWrite.CurrentWindow] = new WriteInfo.Window(Path);
+        }
+
+        public static void ErrorScreen(string ErrorTitle, string ErrorDetails)
+        {
+            Console.BackgroundColor = ErrorBackgroundColor;
+            ForegroundColor = ErrorTextColor;
 
             Clear();
             int This_top = (WritableHeight / 2) - 4;
@@ -227,7 +255,7 @@ namespace termexplorer
             string ErrTitlepad = new string(' ', (WritableWidth - ErrorTitle.Length) / 2);
             Write(ErrTitlepad + ErrorTitle + ErrTitlepad + Environment.NewLine);
 
-            SetCursorPosition(0,This_top + 2);
+            SetCursorPosition(0, This_top + 2);
             WriteLine(ErrorDetails);
 
             WriteLine(Environment.NewLine);

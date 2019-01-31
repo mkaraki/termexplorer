@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "termexplorer", "termexplorer\termexplorer.csproj", "{37D1A9DA-0800-40DD-86AC-8F8045950CCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "termexplorer", "termexplorer\termexplorer.csproj", "{37D1A9DA-0800-40DD-86AC-8F8045950CCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exec", "Exec", "{A386AD59-2CCE-40FE-9175-C394390E2AE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecWindows", "ExecWindows\ExecWindows.csproj", "{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{37D1A9DA-0800-40DD-86AC-8F8045950CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D1A9DA-0800-40DD-86AC-8F8045950CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D1A9DA-0800-40DD-86AC-8F8045950CCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6} = {A386AD59-2CCE-40FE-9175-C394390E2AE7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {90D0E377-B0BF-44D4-B420-F1BAEDF7F007}

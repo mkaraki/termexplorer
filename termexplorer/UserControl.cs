@@ -7,71 +7,61 @@ namespace termexplorer
     {
         public static void Handle(ConsoleKeyInfo cki)
         {
+            int cwin = ToWrite.CurrentWindow;
+
             // Select Content
             #region
             if (cki.Key == ConsoleKey.UpArrow)
             {
-                if (ToWrite.CurrentWindow == 1)
-                    if (ToWrite.Window1.CurrentPointer > 0)
-                        ToWrite.Window1.CurrentPointer--;
-                if (ToWrite.CurrentWindow == 2)
-                    if (ToWrite.Window2.CurrentPointer > 0)
-                        ToWrite.Window2.CurrentPointer--;
+                if (ToWrite.Windows[cwin].CurrentPointer > 0)
+                    ToWrite.Windows[cwin].CurrentPointer--;
             }
             else if (cki.Key == ConsoleKey.DownArrow)
             {
-                if (ToWrite.CurrentWindow == 1)
-                    if (ToWrite.Window1.CurrentPointer < ToWrite.Window1.Files.Count - 1)
-                        ToWrite.Window1.CurrentPointer++;
-                if (ToWrite.CurrentWindow == 2)
-                    if (ToWrite.Window2.CurrentPointer < ToWrite.Window2.Files.Count - 1)
-                        ToWrite.Window2.CurrentPointer++;
+                if (ToWrite.Windows[cwin].CurrentPointer < ToWrite.Windows[1].Files.Count - 1)
+                    ToWrite.Windows[cwin].CurrentPointer++;
             }
             #endregion
             // Press Enter
+            #region
             else if (cki.Key == ConsoleKey.Enter)
-            {
-                if (ToWrite.CurrentWindow == 1)
-                    if (ToWrite.Window1.Files[ToWrite.Window1.CurrentPointer].IsDirectory)
-                        ToWrite.Window1 = new WriteInfo.Window(ToWrite.Window1.Files[ToWrite.Window1.CurrentPointer].FullPath);
-                    else
-                        OpenFile(ToWrite.Window1.Files[ToWrite.Window1.CurrentPointer].FullPath);
-                if (ToWrite.CurrentWindow == 2)
-                    if (ToWrite.Window2.Files[ToWrite.Window2.CurrentPointer].IsDirectory)
-                        ToWrite.Window2 = new WriteInfo.Window(ToWrite.Window2.Files[ToWrite.Window2.CurrentPointer].FullPath);
-                    else
-                        OpenFile(ToWrite.Window2.Files[ToWrite.Window2.CurrentPointer].FullPath);
-            }
+                if (ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer].IsDirectory)
+                    ChangeDir(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer].FullPath,
+                        ToWrite.Windows[cwin].Current.FullPath);
+                else
+                    OpenFile(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer].FullPath);
+            #endregion
             // Change Window
             #region
-            else if (cki.Key == ConsoleKey.RightArrow || cki.Key == ConsoleKey.LeftArrow)
+            else if (cki.Key == ConsoleKey.LeftArrow)
+            {
+                ChangeWindow(true);
+            }
+            else if (cki.Key == ConsoleKey.RightArrow)
             {
                 ChangeWindow(false);
             }
             #endregion
             // Change Address
-            else if (cki.Modifiers == ConsoleModifiers.Alt && cki.Key == ConsoleKey.D)
-            {
-                AddressSelectWindow();
-            }
+            else if (cki.Modifiers == ConsoleModifiers.Alt && cki.Key == ConsoleKey.D) ChangeAddressWindow();
         }
 
-        public static void AddressSelectWindow()
+        public static void ChangeWindow(bool LeftDirection)
         {
-            ChangeAddressWindow();
-        }
-
-        public static void ChangeWindow(bool Direction)
-        {
-            if (ToWrite.CurrentWindow == 1)
-                ToWrite.CurrentWindow = 2;
-            else if (ToWrite.CurrentWindow == 2)
-                ToWrite.CurrentWindow = 1;
+            if (LeftDirection)
+                if (ToWrite.CurrentWindow > 1)
+                    ToWrite.CurrentWindow--;
+                else return;
+            else
+                if (ToWrite.CurrentWindow < ToWrite.Windows.Count - 1)
+                ToWrite.CurrentWindow++;
+            else return;
         }
 
         public static void OpenFile(string FilePath)
         {
-            System.Diagnostics.Process.Start(FilePath);
+            Console.Clear();
+            System.Diagnostics.Process.Start(Config.Program_Exec_Path, $"\"{FilePath}\"");
         }
     }
 }

@@ -2,10 +2,16 @@
 
 namespace termexplorer
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            ConsoleInfo.UpdateConsoleInfo();
+            if (!System.IO.File.Exists(Config.Program_Exec_Path))
+            {
+                VisualWriter.ErrorScreen("File Missing!", $"Important file is missing\nFile: termexplorer - Exec (\"{Config.Program_Exec_Path}\")");
+            }
+
             while (true)
             {
                 ConsoleInfo.UpdateConsoleInfo();
