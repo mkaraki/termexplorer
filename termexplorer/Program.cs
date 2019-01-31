@@ -6,6 +6,9 @@ namespace termexplorer
     {
         private static void Main(string[] args)
         {
+            ConfigManager.LoadDefault();
+            ConfigManager.ReadConfig();
+
             ConsoleInfo.UpdateConsoleInfo();
             if (!System.IO.File.Exists(Config.Program_Exec_Path))
             {

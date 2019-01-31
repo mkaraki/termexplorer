@@ -44,6 +44,8 @@ namespace termexplorer
             #endregion
             // Change Address
             else if (cki.Modifiers == ConsoleModifiers.Alt && cki.Key == ConsoleKey.D) ChangeAddressWindow();
+            //Help
+            else if (cki.Key == ConsoleKey.F1) DocumentWriter.VWriter.LoadDocumentWriter(DocumentWriter.InternalDocuments.Help.Content);
         }
 
         public static void ChangeWindow(bool LeftDirection)

@@ -9,11 +9,27 @@ namespace termexplorer
         {
 
         }
+
+        public static void LoadDefault()
+        {
+            Config.WriteProductName = DefaultConfig.WriteProductName;
+            Config.WriteEOFinReader = DefaultConfig.WriteEOFinReader;
+            Config.Program_Exec_Path = DefaultConfig.Program_Exec_Path;
+
+            Config.ColorMap.DefaultTextColor = DefaultConfig.ColorMap.DefaultTextColor;
+            Config.ColorMap.EntryTextColor = DefaultConfig.ColorMap.EntryTextColor;
+            Config.ColorMap.DirectoryTextColor = DefaultConfig.ColorMap.DirectoryTextColor;
+            Config.ColorMap.ContentBackgroundColor = DefaultConfig.ColorMap.ContentBackgroundColor;
+            Config.ColorMap.DefaultBackgroundColor = DefaultConfig.ColorMap.DefaultBackgroundColor;
+            Config.ColorMap.ErrorBackgroundColor = DefaultConfig.ColorMap.ErrorBackgroundColor;
+            Config.ColorMap.ErrorTextColor = DefaultConfig.ColorMap.ErrorTextColor;
+        }
     }
 
     internal class Config
     {
         public static bool WriteProductName { get; set; }
+        public static bool WriteEOFinReader { get; set; }
         public static string Program_Exec_Path { get; set; }
 
         internal class ColorMap
@@ -22,7 +38,7 @@ namespace termexplorer
             public static ConsoleColor EntryTextColor { get; set; }
             public static ConsoleColor DirectoryTextColor { get; set; }
             public static ConsoleColor ContentBackgroundColor { get; set; }
-            public static ConsoleColor BackgroundColor { get; set; }
+            public static ConsoleColor DefaultBackgroundColor { get; set; }
             public static ConsoleColor ErrorBackgroundColor { get; set; }
             public static ConsoleColor ErrorTextColor { get; set; }
         }
@@ -31,6 +47,7 @@ namespace termexplorer
     internal class DefaultConfig
     {
         public static bool WriteProductName = true;
+        public static bool WriteEOFinReader = false;
         public static string Program_Exec_Path = @"D:\Projects\termexplorer\ExecWindows\bin\Debug\ExecWindows.exe";
 
         internal class ColorMap
@@ -39,7 +56,7 @@ namespace termexplorer
             public static ConsoleColor EntryTextColor = UsableColors.Black;
             public static ConsoleColor DirectoryTextColor = UsableColors.Green;
             public static ConsoleColor ContentBackgroundColor = UsableColors.White;
-            public static ConsoleColor BackgroundColor = UsableColors.Blue;
+            public static ConsoleColor DefaultBackgroundColor = UsableColors.Blue;
             public static ConsoleColor ErrorBackgroundColor = UsableColors.DarkRed;
             public static ConsoleColor ErrorTextColor = UsableColors.White;
         }

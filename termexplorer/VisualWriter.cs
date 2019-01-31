@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static termexplorer.Config.ColorMap;
 using static System.Console;
+using static termexplorer.Config.ColorMap;
 using static termexplorer.ConsoleInfo;
 
 namespace termexplorer
@@ -18,7 +18,7 @@ namespace termexplorer
             string ContentSplit = new string('-', WritableWidth) + Environment.NewLine;
 
             ForegroundColor = DefaultTextColor;
-            Console.BackgroundColor = Config.ColorMap.BackgroundColor;
+            BackgroundColor = DefaultBackgroundColor;
 
             if (Config.WriteProductName)
             {
@@ -29,7 +29,9 @@ namespace termexplorer
 
             //TODO: Write Options
             WritedLine++;
-            WriteLine("Alt+D: Change Dir");
+            Write("F1: Help ");
+            Write("Alt+D: Change Dir ");
+            WriteLine();
 
             // Write Files
             WritedLine += 2;
@@ -48,7 +50,7 @@ namespace termexplorer
 
                 //Split
                 ForegroundColor = DefaultTextColor;
-                Console.BackgroundColor = Config.ColorMap.BackgroundColor;
+                BackgroundColor = DefaultBackgroundColor;
                 Write('|');
 
                 //Window2
@@ -56,7 +58,7 @@ namespace termexplorer
 
                 // End
                 ForegroundColor = DefaultTextColor;
-                Console.BackgroundColor = Config.ColorMap.BackgroundColor;
+                BackgroundColor = DefaultBackgroundColor;
                 Write('|');
 
                 Write(Environment.NewLine);
@@ -65,7 +67,7 @@ namespace termexplorer
             Write(ContentSplit);
         }
 
-        public static void WriteDirEntryWithLine(int WindowId,int CurrentLine,int WritableHeight,int WritableWidth)
+        public static void WriteDirEntryWithLine(int WindowId, int CurrentLine, int WritableHeight, int WritableWidth)
         {
             int id = WindowId;
 
@@ -91,7 +93,7 @@ namespace termexplorer
                 Write(WriteEntryName(ToWrite.Windows[id].Files[w2point].FileName, WritableWidth - 2));
             }
             else
-                Write(new string(' ',WritableWidth));
+                Write(new string(' ', WritableWidth));
         }
 
         public static string WriteEntryName(string Original, int Writable)
@@ -165,6 +167,7 @@ namespace termexplorer
                 OldPath = ToWrite.Windows[ToWrite.CurrentWindow].Current.FullPath;
 
             #region Writer
+
             string WindowName = $"Window {ToWrite.CurrentWindow}";
 
             Clear();
@@ -198,14 +201,14 @@ namespace termexplorer
             Write(new string(' ', WritableWidth));
             SetCursorPosition(0, CursorTop);
 
-            #endregion
+            #endregion Writer
 
             string UCPath = ReadLine().Replace("\"", "");
 
             ChangeDir(UCPath, OldPath ?? Environment.CurrentDirectory);
 
             ForegroundColor = DefaultTextColor;
-            Console.BackgroundColor = Config.ColorMap.BackgroundColor;
+            Console.BackgroundColor = Config.ColorMap.DefaultBackgroundColor;
         }
 
         public static void ChangeDir(string Path, string OldPath)
