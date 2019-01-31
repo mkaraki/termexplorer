@@ -137,7 +137,10 @@ namespace termexplorer
                 public Window(string dirPath, bool CantAccessError = false)
                 {
                     Files = new List<FileInfo>();
-                    try { Files.Add(new FileInfo(dirPath, true)); }
+                    try {
+                        Files.Add(new FileInfo(dirPath, true));
+                        HasParent = true;
+                    }
                     catch { }
 
                     List<string> files = new List<string>();
@@ -151,6 +154,7 @@ namespace termexplorer
                         Files.Add(new FileInfo(fname));
                 }
 
+                public bool HasParent;
                 public FileInfo Current;
                 public bool CantAccess = false;
                 public List<FileInfo> Files;
@@ -195,7 +199,7 @@ namespace termexplorer
 
             WriteLine($"Current: {OldPath}");
 
-            Console.BackgroundColor = ConsoleColor.White;
+            BackgroundColor = ConsoleColor.White;
             ForegroundColor = ConsoleColor.Black;
 
             Write(new string(' ', WritableWidth));
@@ -205,65 +209,10 @@ namespace termexplorer
 
             string UCPath = ReadLine().Replace("\"", "");
 
-            ChangeDir(UCPath, OldPath ?? Environment.CurrentDirectory);
+            UserControl.ChangeDir(UCPath, OldPath ?? Environment.CurrentDirectory);
 
             ForegroundColor = DefaultTextColor;
-            Console.BackgroundColor = Config.ColorMap.DefaultBackgroundColor;
-        }
-
-        public static void ChangeDir(string Path, string OldPath)
-        {
-            try
-            {
-                System.IO.Directory.GetDirectories(Path);
-            }
-            catch (System.IO.DirectoryNotFoundException)
-            {
-                ErrorScreen("No Directory", $"Selected path is not found");
-                Path = OldPath;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                ErrorScreen("Access Denied", $"You don't have permission to access selected directory");
-                Path = OldPath;
-            }
-            catch (System.IO.IOException)
-            {
-                ErrorScreen("Not Directory", $"Selected path is not directory");
-                Path = OldPath;
-            }
-            catch (ArgumentException)
-            {
-                Path = OldPath;
-            }
-
-            ToWrite.Windows[ToWrite.CurrentWindow] = new WriteInfo.Window(Path);
-        }
-
-        public static void ErrorScreen(string ErrorTitle, string ErrorDetails)
-        {
-            Console.BackgroundColor = ErrorBackgroundColor;
-            ForegroundColor = ErrorTextColor;
-
-            Clear();
-            int This_top = (WritableHeight / 2) - 4;
-
-            if (Config.WriteProductName)
-            {
-                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
-                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
-            }
-
-            SetCursorPosition(0, This_top);
-            string ErrTitlepad = new string(' ', (WritableWidth - ErrorTitle.Length) / 2);
-            Write(ErrTitlepad + ErrorTitle + ErrTitlepad + Environment.NewLine);
-
-            SetCursorPosition(0, This_top + 2);
-            WriteLine(ErrorDetails);
-
-            WriteLine(Environment.NewLine);
-            WriteLine("Press Enter to continue.");
-            ReadLine();
+            BackgroundColor = DefaultBackgroundColor;
         }
     }
 }
