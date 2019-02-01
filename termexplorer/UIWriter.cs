@@ -167,7 +167,16 @@ namespace termexplorer
 
             public void WriteDown()
             {
+#if DEBUG
+                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                sw.Start();
+#endif
                 WriteScreen(Screen);
+                GC.Collect();
+#if DEBUG
+                sw.Stop();
+                System.Diagnostics.Debug.WriteLine($"UI Write is finished in {sw.ElapsedMilliseconds}ms");
+#endif
             }
         }
 
