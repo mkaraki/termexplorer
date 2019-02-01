@@ -47,17 +47,20 @@ namespace termexplorer
             }
         }
 
-        private static string ccmd = null;
 
         public static void LineWriter(string line,int point = 0)
         {
             SetCursorPosition(0,point);
 
+            string ccmd = null;
+            string str = "";
 
             foreach (char eachchar in line)
             {
                 if (ccmd == null && eachchar == '\\')
                 {
+                    Write(str);
+                    str = "";
                     ccmd = "";
                     continue;
                 }
@@ -73,8 +76,9 @@ namespace termexplorer
                     continue;
                 }
 
-                Write(eachchar);
+                str += eachchar;
             }
+            Write(str);
         }
 
         public static void RunCmd(string cmd)
