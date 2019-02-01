@@ -27,11 +27,9 @@ namespace termexplorer
                 Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
             }
 
-            //TODO: Write Options
+            // Help Information
             WritedLine++;
-            Write("F1: Help ");
-            Write("Alt+D: Change Dir ");
-            WriteLine();
+            WriteLine("Press F1 to open help");
 
             // Write Files
             WritedLine += 2;
@@ -73,7 +71,7 @@ namespace termexplorer
 
             if (ToWrite.CurrentWindow == id)
             {
-                Console.BackgroundColor = ContentBackgroundColor;
+                BackgroundColor = ContentBackgroundColor;
                 ForegroundColor = EntryTextColor;
             }
 
