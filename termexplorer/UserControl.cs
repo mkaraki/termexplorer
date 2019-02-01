@@ -46,6 +46,18 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.Delete) DeleteFile(cwin);
             // Back to parent
             else if (cki.Key == ConsoleKey.Backspace) GoParent(cwin);
+            // Select/Unselect
+            else if (cki.Key == ConsoleKey.Spacebar) ToggleSelect(cwin);
+        }
+
+        public static void ToggleSelect(int win)
+        {
+            if (ToWrite.Windows[win].Selected.Contains(ToWrite.Windows[win].CurrentPointer))
+                // Remove from selected
+                ToWrite.Windows[win].Selected.Remove(ToWrite.Windows[win].CurrentPointer);
+            else
+                // Add to selected
+                ToWrite.Windows[win].Selected.Add(ToWrite.Windows[win].CurrentPointer);
         }
 
         public static void GoParent(int win)

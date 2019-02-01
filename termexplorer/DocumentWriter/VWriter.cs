@@ -76,10 +76,14 @@ namespace termexplorer.DocumentWriter
 
         public static void SWrite()
         {
-            Clear();
+            UIWriter.UIInfo ui = new UIWriter.UIInfo();
+
+            //UIWriter.ClearLast();
+
+            //Clear();
             int WritedLine = 0;
 
-            string ContentSplit = new string('-', WritableWidth) + Environment.NewLine;
+            string ContentSplit = new string('-', WritableWidth);
 
             ForegroundColor = DefaultTextColor;
             BackgroundColor = DefaultBackgroundColor;
@@ -88,18 +92,21 @@ namespace termexplorer.DocumentWriter
             {
                 WritedLine++;
                 string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
-                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+                ui.WriteLine(titlepad + ProductInfo.Name + titlepad);
             }
 
             //TODO: Write Options
             WritedLine++;
-            WriteLine("q: Back");
+            ui.WriteLine("q: Back");
 
             WritedLine++;
-            Write(ContentSplit);
+            ui.WriteLine(ContentSplit);
 
             WritedLine++;
-            WriteLine("   Title: "+ToWrite.Title);
+            ui.WriteLine("   Title: "+ToWrite.Title);
+
+            WritedLine++;
+            ui.WriteLine(ContentSplit);
 
             int ContentHeight = WritableHeight - 1 - WritedLine;
 
@@ -108,8 +115,10 @@ namespace termexplorer.DocumentWriter
                 if (i < ToWrite.CurrentRow) continue;
                 if (i > ToWrite.CurrentRow+ContentHeight) continue;
 
-                WriteLine(ToWrite.Contents[i]);
+                ui.WriteLine(ToWrite.Contents[i]);
             }
+
+            ui.WriteDown();
         }
     }
 }

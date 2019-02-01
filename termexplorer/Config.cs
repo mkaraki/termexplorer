@@ -7,7 +7,7 @@ namespace termexplorer
     {
         public static void ReadConfig()
         {
-
+            UIWriter.SetColorCode();
         }
 
         public static void LoadDefault()

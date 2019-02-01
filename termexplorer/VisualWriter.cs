@@ -12,28 +12,30 @@ namespace termexplorer
     {
         public static void SWrite()
         {
-            Clear();
+            UIWriter.UIInfo ui = new UIWriter.UIInfo();
+
+            //Clear();
             int WritedLine = 0;
 
-            string ContentSplit = new string('-', WritableWidth) + Environment.NewLine;
+            string ContentSplit = new string('-', WritableWidth);
 
-            ForegroundColor = DefaultTextColor;
-            BackgroundColor = DefaultBackgroundColor;
+            ui.ForegroundColor = "DefaultTextColor";
+            ui.BackgroundColor = "DefaultBackgroundColor";
 
             if (Config.WriteProductName)
             {
                 WritedLine++;
                 string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
-                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+                ui.WriteLine(titlepad + ProductInfo.Name + titlepad);
             }
 
             // Help Information
             WritedLine++;
-            WriteLine("Press F1 to open help");
+            ui.WriteLine("Press F1 to open help");
 
             // Write Files
             WritedLine += 2;
-            Write(ContentSplit);
+            ui.WriteLine(ContentSplit);
 
             int WritableFname = WritableWidth / 2 - 1 - 2;
             int FnameHeight = WritableHeight - 1 - WritedLine;
@@ -41,57 +43,70 @@ namespace termexplorer
             for (int i = 0; i < FnameHeight; i++)
             {
                 // Start
-                Write('|');
+                ui.Write('|');
 
                 //Window1
-                WriteDirEntryWithLine(1, i, FnameHeight, WritableFname + 2);
+                ui.Write(WriteDirEntryWithLine(1, i, FnameHeight, WritableFname + 2));
 
                 //Split
-                ForegroundColor = DefaultTextColor;
-                BackgroundColor = DefaultBackgroundColor;
-                Write('|');
+                ui.ForegroundColor = "DefaultTextColor";
+                ui.BackgroundColor = "DefaultBackgroundColor";
+                ui.Write('|');
 
                 //Window2
-                WriteDirEntryWithLine(2, i, FnameHeight, WritableFname + 2);
+                ui.Write(WriteDirEntryWithLine(2, i, FnameHeight, WritableFname + 2));
 
                 // End
-                ForegroundColor = DefaultTextColor;
-                BackgroundColor = DefaultBackgroundColor;
-                Write('|');
+                ui.ForegroundColor = "DefaultTextColor";
+                ui.BackgroundColor = "DefaultBackgroundColor";
+                ui.Write('|');
 
-                Write(Environment.NewLine);
+                ui.WriteLine();
             }
 
-            Write(ContentSplit);
+            ui.WriteLine(ContentSplit);
+
+            ui.WriteDown();
         }
 
-        public static void WriteDirEntryWithLine(int WindowId, int CurrentLine, int WritableHeight, int WritableWidth)
+        public static string WriteDirEntryWithLine(int WindowId, int CurrentLine, int WritableHeight, int WritableWidth)
         {
+            string toret = "";
             int id = WindowId;
 
             if (ToWrite.CurrentWindow == id)
             {
-                BackgroundColor = ContentBackgroundColor;
-                ForegroundColor = EntryTextColor;
+                toret += UIWriter.GetBGColorCmd("ContentBackgroundColor");
+                toret += UIWriter.GetFGColorCmd("EntryTextColor");
             }
 
-            int w2point = CurrentLine;
+            int wpoint = CurrentLine;
             if (ToWrite.Windows[id].Files.Count > WritableHeight)
-                w2point += ToWrite.Windows[id].CurrentPointer;
+                wpoint += ToWrite.Windows[id].CurrentPointer;
 
-            if (w2point < ToWrite.Windows[id].Files.Count)
+            if (wpoint < ToWrite.Windows[id].Files.Count)
             {
-                if (w2point == ToWrite.Windows[id].CurrentPointer)
-                    Write("> ");
+                // Pointer
+                if (wpoint == ToWrite.Windows[id].CurrentPointer)
+                    toret += (">");
                 else
-                    Write("  ");
+                    toret += (" ");
 
-                if (ToWrite.Windows[id].Files[w2point].FileName != ".." && ToWrite.Windows[id].Files[w2point].IsDirectory)
-                    ForegroundColor = DirectoryTextColor;
-                Write(WriteEntryName(ToWrite.Windows[id].Files[w2point].FileName, WritableWidth - 2));
+                // Selected
+                if (ToWrite.Windows[id].Selected.Contains(wpoint))
+                    toret += ("*");
+                else
+                    toret += (" ");
+
+                // FileName
+                if (ToWrite.Windows[id].Files[wpoint].FileName != ".." && ToWrite.Windows[id].Files[wpoint].IsDirectory)
+                    toret += UIWriter.GetFGColorCmd("DirectoryTextColor");
+                toret += (WriteEntryName(ToWrite.Windows[id].Files[wpoint].FileName, WritableWidth - 2));
             }
             else
-                Write(new string(' ', WritableWidth));
+                toret += (new string(' ', WritableWidth));
+
+            return toret;
         }
 
         public static string WriteEntryName(string Original, int Writable)
@@ -150,18 +165,27 @@ namespace termexplorer
 
                     foreach (string fname in files)
                         Files.Add(new FileInfo(fname));
+
+                    Selected = new List<int>();
                 }
 
+                // Can go to parent directory
                 public bool HasParent;
+
+                // Current Dir
                 public FileInfo Current;
-                public bool CantAccess = false;
+
+                //public bool CantAccess = false;
                 public List<FileInfo> Files;
                 public int CurrentPointer = 0;
+                public List<int> Selected;
             }
         }
 
         public static void ChangeAddressWindow()
         {
+            UIWriter.ClearLast();
+
             string OldPath;
             if (ToWrite.Windows[ToWrite.CurrentWindow].Files.Count < 1)
                 OldPath = null;

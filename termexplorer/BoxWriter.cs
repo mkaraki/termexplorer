@@ -12,6 +12,8 @@ namespace termexplorer
     {
         public static void ErrorScreen(string ErrorTitle, string ErrorDetails)
         {
+            UIWriter.ClearLast();
+
             BackgroundColor = ErrorBackgroundColor;
             ForegroundColor = ErrorTextColor;
 
@@ -38,6 +40,8 @@ namespace termexplorer
 
         public static bool CheckScreen(string Title, string Details,bool Default=false)
         {
+            UIWriter.ClearLast();
+
             bool CurrentSelected = false;
 
             BackgroundColor = ErrorBackgroundColor;
