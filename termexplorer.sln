@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.102
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28527.54
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "termexplorer", "termexplorer\termexplorer.csproj", "{37D1A9DA-0800-40DD-86AC-8F8045950CCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exec", "Exec", "{A386AD59-2CCE-40FE-9175-C394390E2AE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExecWindows", "ExecWindows\ExecWindows.csproj", "{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2P File Transfer Library", "P2P File Transfer Library\P2P File Transfer Library.csproj", "{58EE494B-3617-4F54-A522-D9EF9A525BB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D7944E6-7C49-40E8-8D4F-9EF5F07A88D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58EE494B-3617-4F54-A522-D9EF9A525BB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58EE494B-3617-4F54-A522-D9EF9A525BB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58EE494B-3617-4F54-A522-D9EF9A525BB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58EE494B-3617-4F54-A522-D9EF9A525BB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

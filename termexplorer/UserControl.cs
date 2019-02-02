@@ -48,6 +48,30 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.Backspace) GoParent(cwin);
             // Select/Unselect
             else if (cki.Key == ConsoleKey.Spacebar) ToggleSelect(cwin);
+            // Send File
+            else if (cki.Key == ConsoleKey.S) SendFile(cwin);
+        }
+
+        public static void SendFile(int win)
+        {
+            if (ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].FileSize > 60328)
+            {
+                BoxWriter.ErrorScreen("File size is too large!", "This feature is only support less than 60,328 bytes file");
+                return;
+            }
+
+            string fname = ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].FullPath;
+
+            if (!System.IO.File.Exists(fname))
+            {
+                BoxWriter.ErrorScreen("Not file","This feature is only support for file.");
+                return;
+            }
+
+            bool check = BoxWriter.CheckScreen("Really Send this file?", $"File :\"{fname}\"", false);
+            if (check == false) return;
+
+            FileTransfer.Sender.SendFile(fname, "127.0.0.1", 2222);
         }
 
         public static void ToggleSelect(int win)
@@ -81,6 +105,7 @@ namespace termexplorer
         public static void OpenFile(string FilePath)
         {
             Console.Clear();
+            UIWriter.ClearLast();
             System.Diagnostics.Process.Start(Config.Program_Exec_Path, $"\"{FilePath}\"");
         }
 

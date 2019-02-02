@@ -6,6 +6,10 @@ namespace termexplorer
 {
     class ProductInfo
     {
-        public static readonly string Name = "termexplorer";
+        public static readonly string Name = "termexplorer"
+#if DEBUG
+            + " (DEBUG MODE)"
+#endif
+            ;
     }
 }
