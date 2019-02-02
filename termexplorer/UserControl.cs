@@ -49,29 +49,9 @@ namespace termexplorer
             // Select/Unselect
             else if (cki.Key == ConsoleKey.Spacebar) ToggleSelect(cwin);
             // Send File
-            else if (cki.Key == ConsoleKey.S) SendFile(cwin);
-        }
-
-        public static void SendFile(int win)
-        {
-            if (ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].FileSize > 60328)
-            {
-                BoxWriter.ErrorScreen("File size is too large!", "This feature is only support less than 60,328 bytes file");
-                return;
-            }
-
-            string fname = ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].FullPath;
-
-            if (!System.IO.File.Exists(fname))
-            {
-                BoxWriter.ErrorScreen("Not file","This feature is only support for file.");
-                return;
-            }
-
-            bool check = BoxWriter.CheckScreen("Really Send this file?", $"File :\"{fname}\"", false);
-            if (check == false) return;
-
-            FileTransfer.Sender.SendFile(fname, "127.0.0.1", 2222);
+            else if (cki.Key == ConsoleKey.S) FileTransfer.Sender.SendFile(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer]);
+            // Receive File
+            else if (cki.Key == ConsoleKey.R) FileTransfer.Downloader.DownloadFile(ToWrite.Windows[cwin].Current);
         }
 
         public static void ToggleSelect(int win)
@@ -149,17 +129,17 @@ namespace termexplorer
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                BoxWriter.ErrorScreen("No Directory", $"Selected path is not found");
+                BoxWriter.PopScreen("No Directory", $"Selected path is not found");
                 Path = OldPath;
             }
             catch (UnauthorizedAccessException)
             {
-                BoxWriter.ErrorScreen("Access Denied", $"You don't have permission to access selected directory");
+                BoxWriter.PopScreen("Access Denied", $"You don't have permission to access selected directory");
                 Path = OldPath;
             }
             catch (System.IO.IOException)
             {
-                BoxWriter.ErrorScreen("Not Directory", $"Selected path is not directory");
+                BoxWriter.PopScreen("Not Directory", $"Selected path is not directory");
                 Path = OldPath;
             }
             catch (ArgumentException)

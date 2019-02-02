@@ -10,12 +10,12 @@ namespace termexplorer
 {
     class BoxWriter
     {
-        public static void ErrorScreen(string ErrorTitle, string ErrorDetails)
+        public static void PopScreen(string ErrorTitle, string ErrorDetails)
         {
             UIWriter.ClearLast();
 
-            BackgroundColor = ErrorBackgroundColor;
-            ForegroundColor = ErrorTextColor;
+            ForegroundColor = DefaultTextColor;
+            BackgroundColor = DefaultBackgroundColor;
 
             Clear();
             int This_top = (WritableHeight / 2) - 4;
@@ -38,14 +38,69 @@ namespace termexplorer
             ReadLine();
         }
 
+        public static void Splash(string Text)
+        {
+            UIWriter.ClearLast();
+
+            ForegroundColor = DefaultTextColor;
+            BackgroundColor = DefaultBackgroundColor;
+
+            Clear();
+            int This_top = (WritableHeight / 2) - 1;
+
+            if (Config.WriteProductName)
+            {
+                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
+                Write(titlepad + ProductInfo.Name + titlepad + Environment.NewLine);
+            }
+
+            SetCursorPosition(0, This_top);
+            string Pad = new string(' ', (WritableWidth - Text.Length) / 2);
+            Write(Pad + Text + Pad);
+        }
+
+        public static string AskToUserScreen(string Title, string Details)
+        {
+            Clear();
+            UIWriter.ClearLast();
+
+            ForegroundColor = DefaultTextColor;
+            BackgroundColor = DefaultBackgroundColor;
+
+            int This_top = (WritableHeight / 2) - 3;
+
+            if (Config.WriteProductName)
+            {
+                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
+                WriteLine(titlepad + ProductInfo.Name + titlepad);
+            }
+
+            SetCursorPosition(0, This_top);
+            string TargNamepad = new string(' ', (WritableWidth - Title.Length) / 2);
+            WriteLine(TargNamepad + Title + TargNamepad);
+
+            WriteLine();
+            WriteLine();
+
+            WriteLine(Details);
+
+            BackgroundColor = ConsoleColor.White;
+            ForegroundColor = ConsoleColor.Black;
+
+            Write(new string(' ', WritableWidth));
+            SetCursorPosition(0, CursorTop);
+
+            return ReadLine();
+        }
+
         public static bool CheckScreen(string Title, string Details,bool Default=false)
         {
             UIWriter.ClearLast();
 
             bool CurrentSelected = false;
 
-            BackgroundColor = ErrorBackgroundColor;
-            ForegroundColor = ErrorTextColor;
+            ForegroundColor = DefaultTextColor;
+            BackgroundColor = DefaultBackgroundColor;
 
             while (true)
             {

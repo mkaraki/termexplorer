@@ -28,6 +28,8 @@ namespace termexplorer
                 if (CurrentScreen[i] != Screen[i])
                     Writer(Screen, i);
             }
+
+            SetCursorPosition(0,WindowHeight-1);
         }
 
         public static void Writer(List<string> Screen,int wline = -1)

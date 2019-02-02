@@ -1,10 +1,16 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace P2P_File_Transfer_Library
 {
     public class Download
     {
+        public static bool Verify(byte[] original,string Hash)
+        {
+            return Shared.GetHash(original) == Hash;
+        }
+
         public static byte[] WaitByte(int port = 2222)
         {
             UdpClient udp = new UdpClient(AddressFamily.InterNetworkV6);
