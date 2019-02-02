@@ -47,7 +47,6 @@ namespace termexplorer
             }
         }
 
-
         public static void LineWriter(string line,int point = 0)
         {
             SetCursorPosition(0,point);
@@ -176,7 +175,6 @@ namespace termexplorer
                 sw.Start();
 #endif
                 WriteScreen(Screen);
-                GC.Collect();
 #if DEBUG
                 sw.Stop();
                 System.Diagnostics.Debug.WriteLine($"UI Write is finished in {sw.ElapsedMilliseconds}ms");
