@@ -38,7 +38,7 @@ namespace termexplorer
             ui.WriteLine(ContentSplit);
 
             int WritableFname = WritableWidth / 2 - 1 - 2;
-            int FnameHeight = WritableHeight - 1 - WritedLine;
+            int FnameHeight = WritableHeight - 2 - WritedLine;
             string brankfn = new string(' ', WritableFname + 2);
             for (int i = 0; i < FnameHeight; i++)
             {
@@ -65,6 +65,7 @@ namespace termexplorer
             }
 
             ui.WriteLine(ContentSplit);
+            ui.WriteLine(ToWrite.Windows[ToWrite.CurrentWindow].Files[ToWrite.Windows[ToWrite.CurrentWindow].CurrentPointer].FullPath);
 
             ui.WriteDown();
         }

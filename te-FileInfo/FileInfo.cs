@@ -5,7 +5,7 @@ using System.IO;
 
 namespace termexplorer
 {
-    class FileInfo
+    public class FileInfo
     {
         public FileInfo(string FilePath,bool SetParent = false)
         {

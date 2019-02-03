@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static termexplorer.VisualWriter;
 
 namespace termexplorer
@@ -54,6 +55,29 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.S) FileTransfer.Sender.SendFile(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer]);
             // Receive File
             else if (cki.Key == ConsoleKey.R) FileTransfer.Downloader.DownloadFile(ToWrite.Windows[cwin].Current);
+            // Search
+            else if (cki.Key == ConsoleKey.F3) SearchWithName(cwin);
+        }
+
+        public static void SearchWithName(int win)
+        {
+            string pattern = BoxWriter.AskToUserScreen("Search by Name", $"Search string\nBrank to abort.");
+            if (pattern == "") return;
+
+            bool sf = BoxWriter.CheckScreen("Search subfolder", $"Search subfolder too?", true);
+
+            BoxWriter.Splash("Searching");
+
+            List<FileInfo> files = FileSearch.Search.SearchWithName(ToWrite.Windows[win].Current, pattern, sf);
+
+            files.Insert(0, new FileInfo(ToWrite.Windows[win].Current.FullPath)
+            {
+                FileName = "Back"
+            });
+
+            ToWrite.Windows[win].CurrentPointer = 0;
+            ToWrite.Windows[win].Selected = new List<int>();
+            ToWrite.Windows[win].Files = files;
         }
 
         public static void Rename(int win)

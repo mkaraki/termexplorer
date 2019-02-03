@@ -10,6 +10,9 @@ namespace termexplorer
     {
         public static List<string> CurrentScreen = new List<string>();
 
+        private static readonly char MetaStart = '\0';
+        private static readonly char MetaEnd = '\0';
+
         public static void ClearLast()
         {
             CurrentScreen = new List<string>();
@@ -58,14 +61,14 @@ namespace termexplorer
 
             foreach (char eachchar in line)
             {
-                if (ccmd == null && eachchar == '\\')
+                if (ccmd == null && eachchar == MetaStart)
                 {
                     Write(str);
                     str = "";
                     ccmd = "";
                     continue;
                 }
-                else if (ccmd != null && eachchar == ';')
+                else if (ccmd != null && eachchar == MetaEnd)
                 {
                     RunCmd(ccmd);
                     ccmd = null;
@@ -162,12 +165,12 @@ namespace termexplorer
 
             public string BackgroundColor { set {
                     if (ColorCodeList.ContainsKey(value))
-                        Write($"\\bgcolor:{value};");
+                        Write($"{MetaStart}bgcolor:{value}{MetaEnd}");
                 } }
 
             public string ForegroundColor { set {
                     if (ColorCodeList.ContainsKey(value))
-                        Write($"\\fgcolor:{value};");
+                        Write($"{MetaStart}fgcolor:{value}{MetaEnd}");
                 } }
 
             public void WriteDown()
@@ -187,7 +190,7 @@ namespace termexplorer
         public static string GetBGColorCmd(string ColorCode)
         {
             if (ColorCodeList.ContainsKey(ColorCode))
-                return ($"\\bgcolor:{ColorCode};");
+                return ($"{MetaStart}bgcolor:{ColorCode}{MetaEnd}");
             else
                 return null;
         }
@@ -195,7 +198,7 @@ namespace termexplorer
         public static string GetFGColorCmd(string ColorCode)
         {
             if (ColorCodeList.ContainsKey(ColorCode))
-                return ($"\\fgcolor:{ColorCode};");
+                return ($"{MetaStart}fgcolor:{ColorCode}{MetaEnd}");
             else
                 return null;
         }
