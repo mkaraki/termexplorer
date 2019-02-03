@@ -21,6 +21,8 @@ namespace termexplorer
             Config.ColorMap.DirectoryTextColor = DefaultConfig.ColorMap.DirectoryTextColor;
             Config.ColorMap.ContentBackgroundColor = DefaultConfig.ColorMap.ContentBackgroundColor;
             Config.ColorMap.DefaultBackgroundColor = DefaultConfig.ColorMap.DefaultBackgroundColor;
+            Config.ColorMap.TextBoxBackgroundColor = DefaultConfig.ColorMap.TextBoxBackgroundColor;
+            Config.ColorMap.TextBoxTextColor = DefaultConfig.ColorMap.TextBoxTextColor;
             Config.ColorMap.ErrorBackgroundColor = DefaultConfig.ColorMap.ErrorBackgroundColor;
             Config.ColorMap.ErrorTextColor = DefaultConfig.ColorMap.ErrorTextColor;
         }
@@ -39,6 +41,8 @@ namespace termexplorer
             public static ConsoleColor DirectoryTextColor { get; set; }
             public static ConsoleColor ContentBackgroundColor { get; set; }
             public static ConsoleColor DefaultBackgroundColor { get; set; }
+            public static ConsoleColor TextBoxBackgroundColor { get; set; }
+            public static ConsoleColor TextBoxTextColor { get; set; }
             public static ConsoleColor ErrorBackgroundColor { get; set; }
             public static ConsoleColor ErrorTextColor { get; set; }
         }
@@ -57,6 +61,8 @@ namespace termexplorer
             public static ConsoleColor DirectoryTextColor = UsableColors.Green;
             public static ConsoleColor ContentBackgroundColor = UsableColors.White;
             public static ConsoleColor DefaultBackgroundColor = UsableColors.Blue;
+            public static ConsoleColor TextBoxBackgroundColor = UsableColors.White;
+            public static ConsoleColor TextBoxTextColor = UsableColors.Black;
             public static ConsoleColor ErrorBackgroundColor = UsableColors.DarkRed;
             public static ConsoleColor ErrorTextColor = UsableColors.White;
         }

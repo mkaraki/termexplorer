@@ -84,8 +84,8 @@ namespace termexplorer
 
             WriteLine(Details);
 
-            BackgroundColor = ConsoleColor.White;
-            ForegroundColor = ConsoleColor.Black;
+            BackgroundColor = TextBoxBackgroundColor;
+            ForegroundColor = TextBoxTextColor;
 
             Write(new string(' ', WritableWidth));
             SetCursorPosition(0, CursorTop);

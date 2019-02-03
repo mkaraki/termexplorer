@@ -48,10 +48,32 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.Backspace) GoParent(cwin);
             // Select/Unselect
             else if (cki.Key == ConsoleKey.Spacebar) ToggleSelect(cwin);
+            // Rename
+            else if (cki.Key == ConsoleKey.F2) Rename(cwin);
             // Send File
             else if (cki.Key == ConsoleKey.S) FileTransfer.Sender.SendFile(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer]);
             // Receive File
             else if (cki.Key == ConsoleKey.R) FileTransfer.Downloader.DownloadFile(ToWrite.Windows[cwin].Current);
+        }
+
+        public static void Rename(int win)
+        {
+            FileInfo finfo = ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer];
+
+            string dest_name = BoxWriter.AskToUserScreen("Rename",$"Type new name\n\nOldName: {finfo.FileName}");
+            if (dest_name == "") return;
+            string path = System.IO.Path.Combine(ToWrite.Windows[win].Current.FullPath,dest_name);
+
+            if (finfo.IsDirectory)
+            {
+                System.IO.Directory.Move(finfo.FullPath, path);
+            }
+            else
+            {
+                System.IO.File.Move(finfo.FullPath, path);
+            }
+
+            ChangeDirInternal(ToWrite.Windows[win].Current.FullPath);
         }
 
         public static void ToggleSelect(int win)
