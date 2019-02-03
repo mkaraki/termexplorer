@@ -9,17 +9,17 @@ namespace termexplorer.FileTransfer
     {
         public static void SendFile(FileInfo finfo)
         {
-            if (finfo.FileSize > 60328)
-            {
-                BoxWriter.PopScreen("File size is too large!", "This feature is only support less than 60,328 bytes file");
-                return;
-            }
-
             string fname = finfo.FullPath;
 
             if (!System.IO.File.Exists(fname))
             {
                 BoxWriter.PopScreen("Not file", "This feature is only support for file.");
+                return;
+            }
+
+            if (finfo.FileSize > 60328)
+            {
+                BoxWriter.PopScreen("File size is too large!", "This feature is only support less than 60,328 bytes file");
                 return;
             }
 
