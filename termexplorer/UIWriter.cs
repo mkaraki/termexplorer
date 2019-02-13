@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Get_Unicode_EastAsianWidth;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static System.Console;
@@ -125,6 +126,8 @@ namespace termexplorer
                 { "DefaultBackgroundColor", DefaultBackgroundColor},
                 { "ErrorBackgroundColor", ErrorBackgroundColor},
                 { "ErrorTextColor", ErrorTextColor},
+                { "SuccessBackgroundColor", SuccessBackgroundColor},
+                { "SuccessTextColor", SuccessTextColor},
             };
         }
 

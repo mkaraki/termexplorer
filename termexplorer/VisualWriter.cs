@@ -14,6 +14,8 @@ namespace termexplorer
         {
             UIWriter.UIInfo ui = new UIWriter.UIInfo();
 
+            int WindowCnt = ToWrite.Windows.Count - 1;
+
             //Clear();
             int WritedLine = 0;
 
@@ -37,7 +39,7 @@ namespace termexplorer
             WritedLine += 2;
             ui.WriteLine(ContentSplit);
 
-            int WritableFname = WritableWidth / 2 - 1 - 2;
+            int WritableFname = WritableWidth / WindowCnt - 1 - WindowCnt;
             int FnameHeight = WritableHeight - 2 - WritedLine;
             string brankfn = new string(' ', WritableFname + 2);
             for (int i = 0; i < FnameHeight; i++)
@@ -45,27 +47,24 @@ namespace termexplorer
                 // Start
                 ui.Write('|');
 
-                //Window1
-                ui.Write(WriteDirEntryWithLine(1, i, FnameHeight, WritableFname + 2));
+                for (int x = 1; x <= WindowCnt; x++)
+                {
+                    //Window1
+                    ui.Write(WriteDirEntryWithLine(x, i, FnameHeight, WritableFname + 2));
 
-                //Split
-                ui.ForegroundColor = "DefaultTextColor";
-                ui.BackgroundColor = "DefaultBackgroundColor";
-                ui.Write('|');
-
-                //Window2
-                ui.Write(WriteDirEntryWithLine(2, i, FnameHeight, WritableFname + 2));
-
-                // End
-                ui.ForegroundColor = "DefaultTextColor";
-                ui.BackgroundColor = "DefaultBackgroundColor";
-                ui.Write('|');
+                    //Split
+                    ui.ForegroundColor = "DefaultTextColor";
+                    ui.BackgroundColor = "DefaultBackgroundColor";
+                    ui.Write('|');
+                }
 
                 ui.WriteLine();
             }
 
             ui.WriteLine(ContentSplit);
-            ui.WriteLine(ToWrite.Windows[ToWrite.CurrentWindow].Files[ToWrite.Windows[ToWrite.CurrentWindow].CurrentPointer].FullPath);
+
+            string InfoText = ToWrite.Windows[ToWrite.CurrentWindow].Files[ToWrite.Windows[ToWrite.CurrentWindow].CurrentPointer].FullPath;
+            ui.WriteLine(WriteEntryName(InfoText,WritableWidth));
 
             ui.WriteDown();
         }
@@ -114,7 +113,7 @@ namespace termexplorer
         {
             int OriginalLength = EAWCheck.GetStrLenWithEAW(Original, true);
             int Pad = Writable - OriginalLength;
-            if (Pad > 0)
+            if (Pad >= 0)
                 return Original + new string(' ', Pad);
             else
             {
@@ -127,8 +126,9 @@ namespace termexplorer
                     bool ctype = EAWCheck.IsFullWidth(f_char, true);
                     if (ctype) CurrentLen += 2;
                     else CurrentLen += 1;
-                    if (CurrentLen >= 5) break;
+                    if (CurrentLen >= ToWrite) break;
                 }
+                toret += " ... ";
                 return toret;
             }
         }
@@ -141,7 +141,6 @@ namespace termexplorer
             {
                 null,
                 new Window(Environment.CurrentDirectory),
-                new Window(Environment.CurrentDirectory)
             };
 
             public int CurrentWindow = 1;

@@ -10,12 +10,42 @@ namespace termexplorer
 {
     class BoxWriter
     {
-        public static void PopScreen(string ErrorTitle, string ErrorDetails)
+        public enum InfoType
+        {
+            Information,
+            Success,
+            Error,
+            Fatal
+        }
+
+        private static void SetColor(InfoType IType)
+        {
+            if (IType == InfoType.Information)
+            {
+                ForegroundColor = DefaultTextColor;
+                BackgroundColor = DefaultBackgroundColor;
+            }
+            else if (IType == InfoType.Success)
+            {
+                ForegroundColor = SuccessTextColor;
+                BackgroundColor = SuccessBackgroundColor;
+            }
+            else if (IType == InfoType.Error)
+            {
+                ForegroundColor = ErrorTextColor;
+                BackgroundColor = ErrorBackgroundColor;
+            }
+            else if (IType == InfoType.Fatal)
+            {
+                ResetColor();
+            }
+        }
+
+        public static void PopScreen(string ErrorTitle, string ErrorDetails,InfoType IType)
         {
             UIWriter.ClearLast();
 
-            ForegroundColor = DefaultTextColor;
-            BackgroundColor = DefaultBackgroundColor;
+            SetColor(IType);
 
             Clear();
             int This_top = (WritableHeight / 2) - 4;
@@ -55,17 +85,16 @@ namespace termexplorer
             }
 
             SetCursorPosition(0, This_top);
-            string Pad = new string(' ', (WritableWidth - Text.Length) / 2);
+            string Pad = new string(' ', GetPad(Text,WritableWidth) / 2);
             Write(Pad + Text + Pad);
         }
 
-        public static string AskToUserScreen(string Title, string Details)
+        public static string AskToUserScreen(string Title, string Details, InfoType IType)
         {
             Clear();
             UIWriter.ClearLast();
 
-            ForegroundColor = DefaultTextColor;
-            BackgroundColor = DefaultBackgroundColor;
+            SetColor(IType);
 
             int This_top = (WritableHeight / 2) - 3;
 
@@ -93,14 +122,13 @@ namespace termexplorer
             return ReadLine();
         }
 
-        public static bool CheckScreen(string Title, string Details,bool Default=false)
+        public static bool CheckScreen(string Title, string Details, bool Default, InfoType IType)
         {
             UIWriter.ClearLast();
 
             bool CurrentSelected = false;
 
-            ForegroundColor = DefaultTextColor;
-            BackgroundColor = DefaultBackgroundColor;
+            SetColor(IType);
 
             while (true)
             {

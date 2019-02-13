@@ -57,14 +57,30 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.R) FileTransfer.Downloader.DownloadFile(ToWrite.Windows[cwin].Current);
             // Search
             else if (cki.Key == ConsoleKey.F3) SearchWithName(cwin);
+            // Windows Add/Rem
+            else if (cki.Key == ConsoleKey.OemPlus||cki.Key == ConsoleKey.Add) AddWindow();
+            else if (cki.Key == ConsoleKey.OemMinus || cki.Key == ConsoleKey.Subtract) RemoveWindow(cwin);
+        }
+
+        public static void AddWindow()
+        {
+            ToWrite.Windows.Add(new WriteInfo.Window(Environment.CurrentDirectory));
+        }
+
+        public static void RemoveWindow(int win)
+        {
+            if (ToWrite.Windows.Count <= 2) return;
+            if (ToWrite.Windows.Count - 1 == win)
+                ToWrite.CurrentWindow = win - 1;
+            ToWrite.Windows.RemoveAt(win);
         }
 
         public static void SearchWithName(int win)
         {
-            string pattern = BoxWriter.AskToUserScreen("Search by Name", $"Search string\nBrank to abort.");
+            string pattern = BoxWriter.AskToUserScreen("Search by Name", $"Search string\nBrank to abort.", BoxWriter.InfoType.Information);
             if (pattern == "") return;
 
-            bool sf = BoxWriter.CheckScreen("Search subfolder", $"Search subfolder too?", true);
+            bool sf = BoxWriter.CheckScreen("Search subfolder", $"Search subfolder too?" ,true, BoxWriter.InfoType.Information);
 
             BoxWriter.Splash("Searching");
 
@@ -84,7 +100,7 @@ namespace termexplorer
         {
             FileInfo finfo = ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer];
 
-            string dest_name = BoxWriter.AskToUserScreen("Rename",$"Type new name\n\nOldName: {finfo.FileName}");
+            string dest_name = BoxWriter.AskToUserScreen("Rename",$"Type new name\n\nOldName: {finfo.FileName}",BoxWriter.InfoType.Information);
             if (dest_name == "") return;
             string path = System.IO.Path.Combine(ToWrite.Windows[win].Current.FullPath,dest_name);
 
@@ -141,14 +157,14 @@ namespace termexplorer
 
             if (ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].IsDirectory)
             {
-                bool check = BoxWriter.CheckScreen("Really Delete this directory?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis directory and contents CAN'T be recovary.", false);
+                bool check = BoxWriter.CheckScreen("Really Delete this directory?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis directory and contents CAN'T be recovary.", false, BoxWriter.InfoType.Error);
                 if (check == false) return;
 
                 System.IO.Directory.Delete(fname);
             }
             else
             {
-                bool check = BoxWriter.CheckScreen("Really Delete this?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis file CAN'T be recovary.", false);
+                bool check = BoxWriter.CheckScreen("Really Delete this?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis file CAN'T be recovary.", false, BoxWriter.InfoType.Error);
                 if (check == false) return;
 
                 System.IO.File.Delete(fname);
@@ -175,17 +191,17 @@ namespace termexplorer
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                BoxWriter.PopScreen("No Directory", $"Selected path is not found");
+                BoxWriter.PopScreen("No Directory", $"Selected path is not found", BoxWriter.InfoType.Error);
                 Path = OldPath;
             }
             catch (UnauthorizedAccessException)
             {
-                BoxWriter.PopScreen("Access Denied", $"You don't have permission to access selected directory");
+                BoxWriter.PopScreen("Access Denied", $"You don't have permission to access selected directory", BoxWriter.InfoType.Error);
                 Path = OldPath;
             }
             catch (System.IO.IOException)
             {
-                BoxWriter.PopScreen("Not Directory", $"Selected path is not directory");
+                BoxWriter.PopScreen("Not Directory", $"Selected path is not directory", BoxWriter.InfoType.Error);
                 Path = OldPath;
             }
             catch (ArgumentException)
