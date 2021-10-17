@@ -140,7 +140,7 @@ namespace termexplorer
     {
         public static bool WriteProductName = true;
         public static bool WriteEOFinReader = false;
-        public static string Program_Exec_Path = @"C:\Ext\VSProj\termexplorer\ExecWindows\bin\Debug\ExecWindows.exe";
+        public static string Program_Exec_Path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ExecWindows.exe");
 
         internal class ColorMap
         {

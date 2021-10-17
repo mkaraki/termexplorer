@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExecWindows\ExecWindows.csproj" />
     <ProjectReference Include="..\FileSearch\FileSearch.csproj" />
     <ProjectReference Include="..\P2P File Transfer Library\P2P File Transfer Library.csproj" />
     <ProjectReference Include="..\te-FileInfo\te-FileInfo.csproj" />
