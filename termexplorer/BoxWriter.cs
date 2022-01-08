@@ -93,6 +93,8 @@ namespace termexplorer
         {
             Clear();
             UIWriter.ClearLast();
+            
+            CursorVisible = true;
 
             SetColor(IType);
 
@@ -119,7 +121,10 @@ namespace termexplorer
             Write(new string(' ', WritableWidth));
             SetCursorPosition(0, CursorTop);
 
-            return ReadLine();
+            string res = ReadLine();
+            CursorVisible = false;
+
+            return res;
         }
 
         public static bool CheckScreen(string Title, string Details, bool Default, InfoType IType)

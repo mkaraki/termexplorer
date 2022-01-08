@@ -8,6 +8,7 @@ namespace termexplorer
         {
             Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.CursorVisible = false;
 
             try
             {
@@ -39,6 +40,7 @@ namespace termexplorer
             finally
             {
                 SaveLog();
+                Console.CursorVisible = true;
                 Console.ResetColor();
             }
         }

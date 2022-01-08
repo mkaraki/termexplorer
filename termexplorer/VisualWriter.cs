@@ -192,44 +192,19 @@ namespace termexplorer
             else
                 OldPath = ToWrite.Windows[ToWrite.CurrentWindow].Current.FullPath;
 
-            #region Writer
+            string msg = "";
 
-            string WindowName = $"Window {ToWrite.CurrentWindow}";
-
-            Clear();
-            int This_top = (WritableHeight / 2) - 3;
-
-            if (Config.WriteProductName)
-            {
-                string titlepad = new string(' ', (WritableWidth - ProductInfo.Name.Length) / 2);
-                WriteLine(titlepad + ProductInfo.Name + titlepad);
-            }
-
-            SetCursorPosition(0, This_top);
-            string TargNamepad = new string(' ', (WritableWidth - WindowName.Length) / 2);
-            WriteLine(TargNamepad + WindowName + TargNamepad);
-
-            WriteLine();
-
-            // Aveable Drive Show
-            Write("Aveable Drives:");
+            msg += "Aveable Drives:";
             string[] drives = System.IO.Directory.GetLogicalDrives();
             foreach (string drv in drives)
-                Write($" [{drv}]");
-            WriteLine();
-            WriteLine();
+                msg += $" [{drv}]";
+            msg += Environment.NewLine;
+            msg += Environment.NewLine;
 
-            WriteLine($"Current: {OldPath}");
+            msg += $"Current: {OldPath}";
 
-            BackgroundColor = ConsoleColor.White;
-            ForegroundColor = ConsoleColor.Black;
-
-            Write(new string(' ', WritableWidth));
-            SetCursorPosition(0, CursorTop);
-
-            #endregion Writer
-
-            string UCPath = ReadLine().Replace("\"", "");
+            string UCPath = BoxWriter.AskToUserScreen($"Window {ToWrite.CurrentWindow}", msg, BoxWriter.InfoType.Information);
+            UCPath = UCPath.Trim('"');
 
             UserControl.ChangeDir(UCPath, OldPath ?? Environment.CurrentDirectory);
 
