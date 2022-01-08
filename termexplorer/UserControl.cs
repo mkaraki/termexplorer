@@ -157,14 +157,14 @@ namespace termexplorer
 
             if (ToWrite.Windows[win].Files[ToWrite.Windows[win].CurrentPointer].IsDirectory)
             {
-                bool check = BoxWriter.CheckScreen("Really Delete this directory?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis directory and contents CAN'T be recovary.", false, BoxWriter.InfoType.Error);
+                bool check = BoxWriter.CheckScreen("Really Delete this directory?", $"\"{fname}\"\nWill be deleted abd cannot undo it.", false, BoxWriter.InfoType.Error);
                 if (check == false) return;
 
                 System.IO.Directory.Delete(fname);
             }
             else
             {
-                bool check = BoxWriter.CheckScreen("Really Delete this?", $"\"{fname}\"\nWill be \"PERFECTLY\" deleted\nThis file CAN'T be recovary.", false, BoxWriter.InfoType.Error);
+                bool check = BoxWriter.CheckScreen("Really Delete this?", $"\"{fname}\"\nWill be deleted and cannot undo.", false, BoxWriter.InfoType.Error);
                 if (check == false) return;
 
                 System.IO.File.Delete(fname);
