@@ -9,10 +9,8 @@ namespace termexplorer
             Console.InputEncoding = System.Text.Encoding.UTF8;
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-#if !DEBUG
             try
             {
-#endif
                 ConfigManager.InitConfig();
 
                 ConsoleInfo.UpdateConsoleInfo();
@@ -31,17 +29,18 @@ namespace termexplorer
                     else if (cki.Modifiers.HasFlag(ConsoleModifiers.Control) && cki.Modifiers.HasFlag(ConsoleModifiers.Shift) && cki.Key == ConsoleKey.I) DebugLogViewer();
                     UserControl.Handle(cki);
                 }
-#if !DEBUG
             }
+#if !DEBUG
             catch (Exception ex)
             {
                 Logging(LogLevel.UnExpectedExceptionThrown, $"Unhandled Exception is thrown ({ex.Message} in {ex.Source}). Program will be close");
             }
+#endif
             finally
             {
                 SaveLog();
+                Console.ResetColor();
             }
-#endif
         }
 
         private static void DebugLogViewer()

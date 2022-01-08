@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using static termexplorer.VisualWriter;
 
 namespace termexplorer
@@ -183,33 +184,39 @@ namespace termexplorer
             ToWrite.Windows[ToWrite.CurrentWindow] = new WriteInfo.Window(Path);
         }
 
-        public static void ChangeDir(string Path, string OldPath)
+        public static void ChangeDir(string NewPath, string OldPath)
         {
+            if (NewPath.StartsWith('~'))
+            {
+                NewPath = NewPath.TrimStart('~', '/', '\\');
+                NewPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), NewPath);
+            }
+
             try
             {
-                System.IO.Directory.GetDirectories(Path);
+                Directory.GetDirectories(NewPath);
             }
-            catch (System.IO.DirectoryNotFoundException)
+            catch (DirectoryNotFoundException)
             {
                 BoxWriter.PopScreen("No Directory", $"Selected path is not found", BoxWriter.InfoType.Error);
-                Path = OldPath;
+                NewPath = OldPath;
             }
             catch (UnauthorizedAccessException)
             {
                 BoxWriter.PopScreen("Access Denied", $"You don't have permission to access selected directory", BoxWriter.InfoType.Error);
-                Path = OldPath;
+                NewPath = OldPath;
             }
-            catch (System.IO.IOException)
+            catch (IOException)
             {
                 BoxWriter.PopScreen("Not Directory", $"Selected path is not directory", BoxWriter.InfoType.Error);
-                Path = OldPath;
+                NewPath = OldPath;
             }
             catch (ArgumentException)
             {
-                Path = OldPath;
+                NewPath = OldPath;
             }
 
-            ToWrite.Windows[ToWrite.CurrentWindow] = new WriteInfo.Window(Path);
+            ToWrite.Windows[ToWrite.CurrentWindow] = new WriteInfo.Window(NewPath);
         }
     }
 }
