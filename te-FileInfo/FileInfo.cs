@@ -9,16 +9,30 @@ namespace termexplorer
     {
         public FileInfo(string FilePath,bool SetParent = false)
         {
-            if (SetParent)
+            DirectoryInfo Parentfinfo = Directory.GetParent(FilePath);
+            if (SetParent && Parentfinfo == null)
             {
-                DirectoryInfo Parentfinfo = Directory.GetParent(FilePath);
+                // For Root directory (..)
+                FileName = ". (Root)";
+                FileExtension = "";
+                FileSize = 0;
+                IsDirectory = true;
 
-                FullPath = Parentfinfo.FullName;
+                FullPath = FilePath;
+                CreatedDate = DateTime.Now;
+                UpdatedDate = DateTime.Now;
+
+                return;
+            }
+            else if (SetParent)
+            {
+                // Generate ..
                 FileName = "..";
                 FileExtension = "";
                 FileSize = 0;
                 IsDirectory = true;
 
+                FullPath = Parentfinfo.FullName;
                 CreatedDate = Parentfinfo.CreationTime;
                 UpdatedDate = Parentfinfo.LastWriteTime;
 
