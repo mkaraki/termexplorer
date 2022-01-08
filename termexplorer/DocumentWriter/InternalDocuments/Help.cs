@@ -13,10 +13,11 @@ namespace termexplorer.DocumentWriter.InternalDocuments
             "Explorer View:",
             "Q                : Exit this application",
             "F1               : Open this help",
+            "F2               : Rename file",
+            "F5               : Update current window's directory",
             "Up/Down Arrow    : Select item from current window",
             "Left/Right Arrow : Select window",
             "Alt + D          : Change current window's directory",
-            "F5               : Update current window's directory",
             "Del              : Delete selected item from current window",
 
         },
