@@ -17,7 +17,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ExecWindows\ExecWindows.csproj" />
     <ProjectReference Include="..\FileSearch\FileSearch.csproj" />
-    <ProjectReference Include="..\P2P File Transfer Library\P2P File Transfer Library.csproj" />
     <ProjectReference Include="..\te-FileInfo\te-FileInfo.csproj" />
   </ItemGroup>
 

@@ -52,10 +52,6 @@ namespace termexplorer
             else if (cki.Key == ConsoleKey.Spacebar) ToggleSelect(cwin);
             // Rename
             else if (cki.Key == ConsoleKey.F2) Rename(cwin);
-            // Send File
-            else if (cki.Key == ConsoleKey.S) FileTransfer.Sender.SendFile(ToWrite.Windows[cwin].Files[ToWrite.Windows[cwin].CurrentPointer]);
-            // Receive File
-            else if (cki.Key == ConsoleKey.R) FileTransfer.Downloader.DownloadFile(ToWrite.Windows[cwin].Current);
             // Search
             else if (cki.Key == ConsoleKey.F3) SearchWithName(cwin);
             // Windows Add/Rem
